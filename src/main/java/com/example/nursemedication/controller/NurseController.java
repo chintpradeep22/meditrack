@@ -1,10 +1,8 @@
 package com.example.nursemedication.controller;
 
-import com.example.nursemedication.model.Medication;
-import com.example.nursemedication.model.MedicationSchedule;
-import com.example.nursemedication.model.Nurse;
-import com.example.nursemedication.model.Patient;
+import com.example.nursemedication.model.*;
 import com.example.nursemedication.service.MedicationService;
+import com.example.nursemedication.service.NotificationService;
 import com.example.nursemedication.service.NurseService;
 import com.example.nursemedication.service.PatientService;
 import com.example.nursemedication.service.SchedulerService;
@@ -27,16 +25,19 @@ public class NurseController {
     private final PatientService patientService;
     private final MedicationService medicationService;
     private final SchedulerService schedulerService;
+    private final NotificationService notificationService;
 
     public NurseController(NurseService nurseService, PatientService patientService,
-            MedicationService medicationService, SchedulerService schedulerService) {
+            MedicationService medicationService, SchedulerService schedulerService,
+            NotificationService notificationService) {
         this.nurseService = nurseService;
         this.patientService = patientService;
         this.medicationService = medicationService;
         this.schedulerService = schedulerService;
+        this.notificationService = notificationService;
     }
 
-    // 👤 Get nurse profile
+    // Get nurse profile
     @GetMapping("/profile")
     public Nurse getProfile(HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -46,7 +47,7 @@ public class NurseController {
         return nurseService.getNurseById(nurse.getId());
     }
 
-    // 👤 Update nurse profile
+    // Update nurse profile
     @PutMapping("/profile")
     public Nurse updateProfile(@RequestBody Nurse updatedNurse, HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -56,7 +57,7 @@ public class NurseController {
         return nurseService.updateNurseProfile(nurse.getId(), updatedNurse);
     }
 
-    // 👩‍⚕️ Get patients assigned to nurse's floor
+    // Get patients assigned to nurse's floor
     @GetMapping("/patients")
     public List<Patient> getPatientsByFloor(HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -66,7 +67,7 @@ public class NurseController {
         return patientService.getPatientsByFloor(nurse.getFloor().getId());
     }
 
-    // 👤 Nurse gets patient details
+    // Nurse gets patient details
     @GetMapping("/patients/{patientId}")
     public Patient getPatientDetails(@PathVariable Long patientId, HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -83,7 +84,7 @@ public class NurseController {
         return patient;
     }
 
-    // 💊 Get all medications for patients in nurse's floor
+    // Get all medications for patients in nurse's floor
     @GetMapping("/medications")
     public List<Medication> getMedicationsForFloor(HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -95,7 +96,7 @@ public class NurseController {
         return medicationService.getMedicationsByFloor(floorId);
     }
 
-    // 💊 Get medications for a specific patient (only if on nurse's floor)
+    // Get medications for a specific patient (only if on nurse's floor)
     @GetMapping("/patients/{patientId}/medications")
     public List<Medication> getMedicationsForPatient(@PathVariable Long patientId, HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -111,7 +112,7 @@ public class NurseController {
         return medicationService.getMedicationsByPatient(patientId);
     }
 
-    // ⏰ Get today's medication schedules for nurse's floor
+    // Get today's medication schedules for nurse's floor
     @GetMapping("/medication-schedules")
     public List<MedicationSchedule> getTodaysSchedules(HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -128,7 +129,7 @@ public class NurseController {
                 .collect(Collectors.toList());
     }
 
-    // ⏰ Get upcoming schedules (future today or later) for nurse's floor
+    // Get upcoming schedules (future today or later) for nurse's floor
     @GetMapping("/medication-schedules/upcoming")
     public List<MedicationSchedule> getUpcomingSchedules(HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -145,7 +146,7 @@ public class NurseController {
                 .collect(Collectors.toList());
     }
 
-    // ⏰ Get missed schedules for nurse's floor
+    // Get missed schedules for nurse's floor
     @GetMapping("/medication-schedules/missed")
     public List<MedicationSchedule> getMissedSchedules(HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -163,7 +164,7 @@ public class NurseController {
                 .collect(Collectors.toList());
     }
 
-    // ✅ Mark medication as GIVEN
+    // Mark medication as GIVEN
     @PutMapping("/medication-schedules/{scheduleId}/mark-given")
     public MedicationSchedule markGiven(@PathVariable Long scheduleId, HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -182,7 +183,7 @@ public class NurseController {
         return schedulerService.saveSchedule(schedule);
     }
 
-    // ✅ Mark medication as MISSED
+    // Mark medication as MISSED
     @PutMapping("/medication-schedules/{scheduleId}/mark-missed")
     public MedicationSchedule markMissed(@PathVariable Long scheduleId, HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute("USER");
@@ -200,4 +201,31 @@ public class NurseController {
         schedule.setStatus(MedicationSchedule.Status.MISSED);
         return schedulerService.saveSchedule(schedule);
     }
+
+    // Get notifications for nurse
+    @GetMapping("/notifications")
+    public List<Notification> getNotifications(HttpSession session) {
+        Nurse nurse = (Nurse) session.getAttribute("USER");
+        if (nurse == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Nurse not logged in");
+        }
+        return notificationService.getNotificationsForNurse(nurse);
+    }
+
+    // Mark notification as read
+    @PutMapping("/notifications/{id}/read")
+    public Notification markNotificationAsRead(
+            @PathVariable Long id,
+            HttpSession session) {
+
+        Nurse nurse = (Nurse) session.getAttribute("USER");
+        if (nurse == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Nurse not logged in");
+        }
+
+        return notificationService.markAsRead(id);
+    }
+
 }

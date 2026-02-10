@@ -21,10 +21,6 @@ public class Notification {
     @JoinColumn(name = "nurse_id", nullable = false)
     private Nurse nurse;
 
-    // Constructors
-    public Notification() {
-    }
-
     public Notification(String message, Nurse nurse) {
         this.message = message;
         this.nurse = nurse;

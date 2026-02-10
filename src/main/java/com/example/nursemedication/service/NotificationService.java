@@ -14,7 +14,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
-    // ✅ Single constructor for Spring DI
+    // Single constructor for Spring DI
     public NotificationService(NotificationRepository notificationRepository,
             SimpMessagingTemplate messagingTemplate) {
         this.notificationRepository = notificationRepository;
@@ -26,7 +26,7 @@ public class NotificationService {
         Notification notification = new Notification(message, nurse);
         Notification saved = notificationRepository.save(notification);
 
-        // 🔔 Send real-time notification to the nurse
+        // Send real-time notification to the nurse
         messagingTemplate.convertAndSend("/topic/notifications/" + nurse.getId(), saved);
 
         return saved;

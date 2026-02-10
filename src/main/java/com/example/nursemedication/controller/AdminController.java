@@ -30,10 +30,9 @@ public class AdminController {
         this.scheduleService = scheduleService;
     }
 
-    // 👩‍⚕️ Get all nurses
+    // Get all nurses
     @GetMapping("/nurses")
     public List<Nurse> getAllNurses(HttpSession session) {
-        // ✅ Check if admin is logged in
         Object user = session.getAttribute("USER");
         if (user == null || !user.getClass().getSimpleName().equals("User")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Admin not logged in");
@@ -42,12 +41,12 @@ public class AdminController {
         return nurseService.getAllNurses();
     }
 
+    // Update floor to nurses
     @PutMapping("/nurses/{nurseId}/assign-floor/{floorId}")
     public Nurse assignFloor(
             @PathVariable Long nurseId,
             @PathVariable Long floorId,
             HttpSession session) {
-        // Only admin can do this
         Object user = session.getAttribute("USER");
         if (user == null || !user.getClass().getSimpleName().equals("User")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Admin not logged in");
@@ -56,7 +55,7 @@ public class AdminController {
         return nurseService.assignFloorToNurse(nurseId, floorId);
     }
 
-    // ✅ Get all nurses assigned to a floor
+    // Get all nurses assigned to a floor
     @GetMapping("/floors/{floorId}/nurses")
     public List<Nurse> getNursesByFloor(
             @PathVariable Long floorId,
@@ -69,6 +68,7 @@ public class AdminController {
         return nurseService.getNursesByFloor(floorId);
     }
 
+    // Get all patients
     @GetMapping("/patients")
     public List<Patient> getAllPatients(HttpSession session) {
         Object user = session.getAttribute("USER");
@@ -79,6 +79,7 @@ public class AdminController {
         return patientService.getAllPatients();
     }
 
+    // Update patient to other floor
     @PutMapping("/patients/{patientId}/assign-floor/{floorId}")
     public Patient assignPatientToFloor(@PathVariable Long patientId, @PathVariable Long floorId, HttpSession session) {
         Object user = session.getAttribute("USER");
@@ -89,7 +90,7 @@ public class AdminController {
         return patientService.assignPatientToFloor(patientId, floorId);
     }
 
-    // ✅ Get all patients in a floor
+    // Get all patients in a floor
     @GetMapping("/floors/{floorId}/patients")
     public List<Patient> getPatientsByFloor(@PathVariable Long floorId, HttpSession session) {
         Object user = session.getAttribute("USER");
@@ -100,6 +101,7 @@ public class AdminController {
         return patientService.getPatientsByFloor(floorId);
     }
 
+    // Create new medication to patient
     @PostMapping("/medications/{patientId}")
     public Medication addMedication(@PathVariable Long patientId,
             @RequestBody Medication medication, HttpSession session) {
@@ -110,6 +112,7 @@ public class AdminController {
         return medicationService.addMedication(patientId, medication);
     }
 
+    // Get all medications
     @GetMapping("/medications")
     public List<Medication> getAllMedications(HttpSession session) {
         Object user = session.getAttribute("USER");
@@ -119,6 +122,7 @@ public class AdminController {
         return medicationService.getAllMedications();
     }
 
+    // Get medications of patient
     @GetMapping("/patients/{patientId}/medications")
     public List<Medication> getMedicationsByPatient(@PathVariable Long patientId, HttpSession session) {
         Object user = session.getAttribute("USER");
@@ -128,6 +132,7 @@ public class AdminController {
         return medicationService.getMedicationsByPatient(patientId);
     }
 
+    // Create medication schedules to patient
     @PostMapping("/medication-schedules")
     public MedicationSchedule createSchedule(@RequestBody MedicationScheduleDTO dto, HttpSession session) {
         Object user = session.getAttribute("USER");

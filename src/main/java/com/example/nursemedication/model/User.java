@@ -15,8 +15,7 @@ public class User {
     private String role;
 
     public enum Role {
-        ADMIN,
-        NURSE
+        ADMIN
     }
 
     public User() {

@@ -30,7 +30,7 @@ public class PatientService {
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
     }
 
-    // ✅ Assign patient to floor
+    // Assign patient to floor
     public Patient assignPatientToFloor(Long patientId, Long floorId) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
@@ -42,7 +42,7 @@ public class PatientService {
         return patientRepository.save(patient);
     }
 
-    // ✅ Get patients by floor
+    // Get patients by floor
     public List<Patient> getPatientsByFloor(Long floorId) {
         return patientRepository.findByFloorId(floorId);
     }

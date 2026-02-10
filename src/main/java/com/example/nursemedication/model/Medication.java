@@ -18,14 +18,10 @@ public class Medication {
 
     private String instructions; // After food, before sleep, etc.
 
-    // Many medications → One patient
+    // Many medications -> One patient
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
-
-    // Constructors
-    public Medication() {
-    }
 
     public Medication(String medicineName, String dosage, String instructions, Patient patient) {
         this.medicineName = medicineName;

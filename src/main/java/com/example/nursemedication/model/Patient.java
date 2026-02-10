@@ -18,19 +18,15 @@ public class Patient {
     @Column(nullable = false)
     private String roomNumber;
 
-    // Many patients → One nurse
+    // Many patients -> One nurse
     @ManyToOne
     @JoinColumn(name = "nurse_id")
     private Nurse nurse;
 
-    // Many patients → One floor
+    // Many patients -> One floor
     @ManyToOne
     @JoinColumn(name = "floor_id")
-    private Floor floor; // ✅ Use entity, not Long
-
-    // Constructors
-    public Patient() {
-    }
+    private Floor floor;
 
     public Patient(String name, int age, String roomNumber, Nurse nurse, Floor floor) {
         this.name = name;

@@ -1,6 +1,7 @@
 package com.example.nursemedication.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,17 +19,23 @@ public class MedicationSchedule {
     @Column(nullable = false)
     private Status status;
 
-    // Many schedules → One medication
+    private boolean reminder10Sent = false;
+
+    private boolean reminder5Sent = false;
+
+    private boolean reminder1Sent = false;
+
+    // Many schedules -> One medication
     @ManyToOne
     @JoinColumn(name = "medication_id", nullable = false)
     private Medication medication;
 
-    // Many schedules → One nurse
+    // Many schedules -> One nurse
     @ManyToOne
     @JoinColumn(name = "nurse_id", nullable = false)
     private Nurse nurse;
 
-    // Many schedules → One patient
+    // Many schedules -> One patient
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
@@ -37,10 +44,6 @@ public class MedicationSchedule {
         PENDING,
         GIVEN,
         MISSED
-    }
-
-    // Constructors
-    public MedicationSchedule() {
     }
 
     public MedicationSchedule(LocalDateTime scheduledTime,
@@ -99,4 +102,29 @@ public class MedicationSchedule {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    public boolean isReminder10Sent() {
+        return reminder10Sent;
+    }
+
+    public void setReminder10Sent(boolean reminder10Sent) {
+        this.reminder10Sent = reminder10Sent;
+    }
+
+    public boolean isReminder5Sent() {
+        return reminder5Sent;
+    }
+
+    public void setReminder5Sent(boolean reminder5Sent) {
+        this.reminder5Sent = reminder5Sent;
+    }
+
+    public boolean isReminder1Sent() {
+        return reminder1Sent;
+    }
+
+    public void setReminder1Sent(boolean reminder1Sent) {
+        this.reminder1Sent = reminder1Sent;
+    }
+
 }

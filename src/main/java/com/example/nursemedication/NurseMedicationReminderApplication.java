@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,47 +26,38 @@ public class NurseMedicationReminderApplication {
 			NurseRepository nurseRepo,
 			PatientRepository patientRepo,
 			MedicationRepository medicationRepo,
-			MedicationScheduleRepository scheduleRepo, UserRepository userRepo) {
+			MedicationScheduleRepository scheduleRepo, UserRepository userRepo, BCryptPasswordEncoder passwordEncoder) {
 		return args -> {
-
-			// ======================
 			// Floors
-			// ======================
 			Floor icu = new Floor("ICU", 1);
 			Floor floor1 = new Floor("General Ward", 2);
 
 			floorRepo.saveAll(List.of(icu, floor1));
 
-			// ======================
 			// Nurses
-			// ======================
 			Nurse nurse1 = new Nurse(
 					"Anita",
 					"EMP001",
 					"9876543210",
-					"anita@123",
+					passwordEncoder.encode("anita@123"), // 🔐 HASHED
 					icu);
 
 			Nurse nurse2 = new Nurse(
 					"Ravi",
 					"EMP002",
 					"9123456780",
-					"anita@123",
+					passwordEncoder.encode("anita@123"), // 🔐 HASHED
 					floor1);
 
 			nurseRepo.saveAll(List.of(nurse1, nurse2));
 
-			// ======================
 			// Patients
-			// ======================
 			Patient patient1 = new Patient("Suresh", 45, "ICU-101", nurse1, icu);
 			Patient patient2 = new Patient("Meena", 60, "GW-202", nurse2, floor1);
 
 			patientRepo.saveAll(List.of(patient1, patient2));
 
-			// ======================
 			// Medications
-			// ======================
 			Medication med1 = new Medication(
 					"Paracetamol",
 					"500mg",
@@ -80,9 +72,7 @@ public class NurseMedicationReminderApplication {
 
 			medicationRepo.saveAll(List.of(med1, med2));
 
-			// ======================
 			// Medication Schedules
-			// ======================
 			MedicationSchedule s1 = new MedicationSchedule(
 					LocalDateTime.now().plusMinutes(10),
 					MedicationSchedule.Status.PENDING,
@@ -108,7 +98,7 @@ public class NurseMedicationReminderApplication {
 
 			User admin1 = new User();
 			admin1.setUsername("alice.admin");
-			admin1.setPassword("admin123");
+			admin1.setPassword(passwordEncoder.encode("admin123")); // 🔐 HASHED
 			admin1.setRole("ADMIN");
 			userRepo.save(admin1);
 

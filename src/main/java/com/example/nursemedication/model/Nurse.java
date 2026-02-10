@@ -20,16 +20,12 @@ public class Nurse {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private String password; // 🔐 NEW FIELD
+    private String password;
 
     // Many nurses belong to one floor
     @ManyToOne
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
-
-    // Constructors
-    public Nurse() {
-    }
 
     public Nurse(String name,
             String employeeId,
@@ -76,7 +72,6 @@ public class Nurse {
         return password;
     }
 
-    // ⚠️ Later we will hash this
     public void setPassword(String password) {
         this.password = password;
     }

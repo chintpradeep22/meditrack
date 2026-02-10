@@ -53,7 +53,7 @@ public class SchedulerService {
 
         MedicationSchedule savedSchedule = scheduleRepository.save(schedule);
 
-        // 🔔 Send notification to nurse
+        // Send notification to nurse
         String message = "New medication scheduled: " + medication.getMedicineName() +
                 " for patient: " + patient.getName() +
                 " at " + dto.getScheduledTime();
@@ -100,7 +100,7 @@ public class SchedulerService {
 
         MedicationSchedule updatedSchedule = scheduleRepository.save(schedule);
 
-        // 🔔 Send notification to nurse
+        // Send notification to nurse
         String message = "Medication schedule updated: " + schedule.getMedication().getMedicineName() +
                 " for patient: " + schedule.getPatient().getName() +
                 " at " + schedule.getScheduledTime();

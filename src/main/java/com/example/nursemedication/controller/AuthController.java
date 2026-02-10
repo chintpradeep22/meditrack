@@ -17,7 +17,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // 🔐 LOGIN
+    // Login
     @PostMapping("/login")
     public Object login(@RequestBody LoginRequest request, HttpSession session) {
 
@@ -29,14 +29,14 @@ public class AuthController {
         return user;
     }
 
-    // 🔓 LOGOUT
+    // Logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "Logged out successfully";
     }
 
-    // 👤 CURRENT USER
+    // Current user
     @GetMapping("/me")
     public Object currentUser(HttpSession session) {
         Object user = session.getAttribute("USER");

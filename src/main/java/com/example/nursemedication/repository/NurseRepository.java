@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface NurseRepository extends JpaRepository<Nurse, Long> {
 
-    // Custom query: get nurses by floor
     Optional<Nurse> findByEmployeeId(String employeeId);
 
     List<Nurse> findByFloorId(Long floorId);
