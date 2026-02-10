@@ -15,6 +15,10 @@ public class Floor {
 
     private int floorNumber;
 
+    // Constructors
+    public Floor() {
+    }
+
     public Floor(String floorName, int floorNumber) {
         this.floorName = floorName;
         this.floorNumber = floorNumber;

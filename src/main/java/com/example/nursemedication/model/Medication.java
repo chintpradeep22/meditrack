@@ -23,6 +23,10 @@ public class Medication {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    // Constructors
+    public Medication() {
+    }
+
     public Medication(String medicineName, String dosage, String instructions, Patient patient) {
         this.medicineName = medicineName;
         this.dosage = dosage;

@@ -13,6 +13,7 @@ public class Notification {
 
     private String message;
 
+    @Column(name = "is_read")
     private boolean read = false;
 
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -20,6 +21,10 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "nurse_id", nullable = false)
     private Nurse nurse;
+
+    // Constructors
+    public Notification() {
+    }
 
     public Notification(String message, Nurse nurse) {
         this.message = message;

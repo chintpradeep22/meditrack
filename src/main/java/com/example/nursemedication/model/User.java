@@ -15,7 +15,7 @@ public class User {
     private String role;
 
     public enum Role {
-        ADMIN
+        ADMIN,
     }
 
     public User() {

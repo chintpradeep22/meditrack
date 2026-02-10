@@ -46,6 +46,10 @@ public class MedicationSchedule {
         MISSED
     }
 
+    // Constructors
+    public MedicationSchedule() {
+    }
+
     public MedicationSchedule(LocalDateTime scheduledTime,
             Status status,
             Medication medication,

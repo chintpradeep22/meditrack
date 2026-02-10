@@ -26,8 +26,15 @@ public class NurseMedicationReminderApplication {
 			NurseRepository nurseRepo,
 			PatientRepository patientRepo,
 			MedicationRepository medicationRepo,
-			MedicationScheduleRepository scheduleRepo, UserRepository userRepo, BCryptPasswordEncoder passwordEncoder) {
+			MedicationScheduleRepository scheduleRepo,
+			UserRepository userRepo,
+			NotificationRepository notificationRepo,
+			BCryptPasswordEncoder passwordEncoder) {
 		return args -> {
+			if (floorRepo.count() > 0) {
+				System.out.println("ℹData already exists, skipping sample load");
+				return;
+			}
 			// Floors
 			Floor icu = new Floor("ICU", 1);
 			Floor floor1 = new Floor("General Ward", 2);
@@ -103,6 +110,16 @@ public class NurseMedicationReminderApplication {
 			userRepo.save(admin1);
 
 			System.out.println("✅ Sample hospital data loaded successfully");
+
+			// Notifications
+			Notification n1 = new Notification("Medication Paracetamol is due for patient Suresh", nurse1);
+
+			Notification n2 = new Notification("Medication Insulin scheduled in 5 minutes for patient Meena", nurse2);
+
+			Notification n3 = new Notification("Medication Paracetamol has already been given", nurse1);
+
+			notificationRepo.saveAll(List.of(n1, n2, n3));
 		};
+
 	}
 }

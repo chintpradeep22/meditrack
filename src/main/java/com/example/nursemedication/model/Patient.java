@@ -28,6 +28,10 @@ public class Patient {
     @JoinColumn(name = "floor_id")
     private Floor floor;
 
+    // Constructors
+    public Patient() {
+    }
+
     public Patient(String name, int age, String roomNumber, Nurse nurse, Floor floor) {
         this.name = name;
         this.age = age;

@@ -27,6 +27,10 @@ public class Nurse {
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
 
+    // Constructors
+    public Nurse() {
+    }
+
     public Nurse(String name,
             String employeeId,
             String phoneNumber,
